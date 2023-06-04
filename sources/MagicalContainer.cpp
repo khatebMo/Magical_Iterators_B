@@ -38,7 +38,7 @@ namespace ariel
         this->element.push_back(element);
         sortVector();
     }
-    int MagicalContainer::size() const
+    size_t MagicalContainer::size() const
     {
         return element.size();
     }
@@ -88,15 +88,7 @@ namespace ariel
     {
         return container.getElements().at(currIndex);
     }
-    MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other)
-    {
-        if (this != &other)
-        {
-            container = other.container;
-            currIndex = other.currIndex;
-        }
-        return *this;
-    }
+
     bool MagicalContainer::AscendingIterator ::operator!=(const AscendingIterator &other) const
     {
         return !(*this == other);
@@ -112,6 +104,19 @@ namespace ariel
     bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const
     {
         return currIndex > other.currIndex;
+    }
+    MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator=(const AscendingIterator &other)
+    {
+        if (&container != &other.container)
+        { // throw error if we try to assign different containers
+            throw runtime_error(" they belong to different containers.");
+        }
+        if (this != &other)
+        {
+            container = other.container;
+            currIndex = other.currIndex;
+        }
+        return *this;
     }
     MagicalContainer::AscendingIterator &MagicalContainer::AscendingIterator::operator++()
     {
@@ -143,11 +148,29 @@ namespace ariel
     }
     int MagicalContainer::SideCrossIterator::operator*() const
     {
-        return container.getElements().at(currIndex);
+        if (currIndex % 2 == 0)
+        {
+            return container.getElements().at(currIndex / 2);
+        }
+        return container.getElements().at(container.size()-1 - ((currIndex - 1) / 2));
+    }
+
+    MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other)
+    {
+        if (&container != &other.container)
+        { // throw error if we try to assign different containers
+            throw runtime_error(" they belong to different containers.");
+        }
+        if (this != &other)
+        {
+            container = other.container;
+            currIndex = other.currIndex;
+        }
+        return *this;
     }
     bool MagicalContainer::SideCrossIterator ::operator!=(const SideCrossIterator &other) const
     {
-        return !(this == &other);
+        return !(*this == other);
     }
     bool MagicalContainer::SideCrossIterator ::operator==(const SideCrossIterator &other) const
     {
@@ -169,7 +192,6 @@ namespace ariel
     bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const
     {
         return currIndex < other.currIndex;
-        
     }
 
     //==============PrimeIterator Class==========
@@ -181,6 +203,11 @@ namespace ariel
     }
     MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &magicalContainer) : container(magicalContainer), currIndex(0)
     {
+        if (currIndex < container.size() && !isPrime(currIndex))
+        {
+
+            currIndex++;
+        }
     }
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator ::begin()
     {
@@ -192,17 +219,32 @@ namespace ariel
     }
     int MagicalContainer::PrimeIterator::operator*() const
     {
-        return 0;
+        return container.getElements().at(currIndex);
     }
     bool MagicalContainer::PrimeIterator ::operator!=(const PrimeIterator &other) const
     {
-        return !(this == &other);
+        return !(*this == other);
     }
 
     bool MagicalContainer::PrimeIterator ::operator==(const PrimeIterator &other) const
     {
         return &container == &other.container && currIndex == other.currIndex;
     }
+
+    MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator=(const PrimeIterator &other)
+    {
+        if (&container != &other.container)
+        { // throw error if we try to assign different containers
+            throw runtime_error(" they belong to different containers.");
+        }
+        if (this != &other)
+        {
+            container = other.container;
+            currIndex = other.currIndex;
+        }
+        return *this;
+    }
+
     MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++()
     {
         if (*this == end() || currIndex >= container.getElements().size())
@@ -210,6 +252,10 @@ namespace ariel
             throw runtime_error(" out of bounds!!");
         }
         currIndex++;
+        if (!isPrime(container.getElements().at(currIndex)) && currIndex < container.size())
+        {
+            currIndex++;
+        }
         return *this;
     }
 

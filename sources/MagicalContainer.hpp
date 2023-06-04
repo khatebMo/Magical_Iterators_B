@@ -13,7 +13,7 @@ namespace ariel
         ~MagicalContainer();
         MagicalContainer();
         void addElement(int);
-        int size() const;
+        size_t size() const;
         void sortVector();
         void removeElement(int);
         vector<int> getElements() const;
@@ -33,10 +33,11 @@ namespace ariel
             AscendingIterator(const AscendingIterator &);
             AscendingIterator begin();
             AscendingIterator end();
-            AscendingIterator &operator=(const AscendingIterator &);
+            // AscendingIterator &operator=(const AscendingIterator &);
             int operator*() const;
             bool operator!=(const AscendingIterator &) const;
             bool operator==(const AscendingIterator &) const;
+            AscendingIterator &operator=(const AscendingIterator &other);
             bool operator<(const AscendingIterator &) const;
             bool operator>(const AscendingIterator &) const;
             AscendingIterator &operator++();
@@ -57,6 +58,7 @@ namespace ariel
 
             SideCrossIterator operator&(SideCrossIterator &&) = delete;
             int operator*() const;
+            SideCrossIterator &operator=(const SideCrossIterator &other);
             bool operator!=(const SideCrossIterator &) const;
             bool operator==(const SideCrossIterator &) const;
             bool operator<(const SideCrossIterator &) const;
@@ -80,6 +82,8 @@ namespace ariel
             int operator*() const;
             bool operator!=(const PrimeIterator &) const;
             PrimeIterator &operator++();
+            PrimeIterator &operator=(const PrimeIterator &other);
+
             bool operator==(const PrimeIterator &) const;
             bool operator<(const PrimeIterator &) const;
             bool operator>(const PrimeIterator &) const;

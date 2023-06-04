@@ -12,6 +12,7 @@ int main() {
     container.addElement(3);
 
     // Print container size
+
     std::cout << "Size of container: " << container.size() << std::endl;
 
     // Use AscendingIterator to display elements in ascending order
@@ -41,6 +42,6 @@ int main() {
     // Remove an element from the container and display the size
     container.removeElement(9);
     std::cout << "Size of container after removing an element: " << container.size() << std::endl;
-
+    
     return 0;
 }
