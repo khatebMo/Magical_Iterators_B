@@ -8,6 +8,7 @@ namespace ariel
     {
     private:
         vector<int> element;
+        vector<int*>primeElement;
 
     public:
         ~MagicalContainer();
@@ -16,6 +17,7 @@ namespace ariel
         size_t size() const;
         void sortVector();
         void removeElement(int);
+        void removePrimeElement(int*);
         vector<int> getElements() const;
 
         class AscendingIterator

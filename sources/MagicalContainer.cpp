@@ -33,26 +33,63 @@ namespace ariel
     {
         std::sort(element.begin(), element.end());
     }
+
     void MagicalContainer::addElement(int element)
     {
         this->element.push_back(element);
         sortVector();
+        primeElement.clear();
+        for (size_t i = 0; i < this->element.size(); ++i)
+        {
+            if (isPrime(this->element.at(i)))
+            {
+                primeElement.push_back(&this->element.at(i));
+            }
+        }
     }
     size_t MagicalContainer::size() const
     {
         return element.size();
     }
+    void MagicalContainer::removePrimeElement(int *prime)
+    {
+        for (auto it = primeElement.begin(); it != primeElement.end(); ++it)
+        {
+            if (*it == prime)
+            {
+                primeElement.erase(it);
+                return;
+            }
+        }
+    }
     void MagicalContainer::removeElement(int removed)
     {
+        bool prime = isPrime(removed);
+        bool exist = false;
+        if (prime)
+        {
+            for (auto i = primeElement.begin(); i != primeElement.end(); i++)
+            {
+                if (**i == removed)
+                {
+                    primeElement.erase(i);
+                    break;
+                }
+            }
+        }
         for (auto it = element.begin(); it != element.end(); ++it)
         {
             if (*it == removed)
             {
                 element.erase(it);
-                return;
+                exist = true;
+                break;
             }
         }
-        throw std::runtime_error("the element is not exist");
+        if (!exist)
+        {
+            throw std::runtime_error("the element is not exist");
+        }
     }
     vector<int> MagicalContainer::getElements() const
     {
@@ -86,6 +123,7 @@ namespace ariel
 
     int MagicalContainer::AscendingIterator::operator*() const
     {
+
         return container.getElements().at(currIndex);
     }
 
@@ -152,7 +190,7 @@ namespace ariel
         {
             return container.getElements().at(currIndex / 2);
         }
-        return container.getElements().at(container.size()-1 - ((currIndex - 1) / 2));
+        return container.getElements().at(container.size() - 1 - ((currIndex - 1) / 2));
     }
 
     MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other)
@@ -203,11 +241,6 @@ namespace ariel
     }
     MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &magicalContainer) : container(magicalContainer), currIndex(0)
     {
-        if (currIndex < container.size() && !isPrime(currIndex))
-        {
-
-            currIndex++;
-        }
     }
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator ::begin()
     {
@@ -215,11 +248,16 @@ namespace ariel
     }
     MagicalContainer::PrimeIterator MagicalContainer::PrimeIterator ::end()
     {
-        return PrimeIterator(container, container.size());
+        return PrimeIterator(container, container.primeElement.size());
     }
     int MagicalContainer::PrimeIterator::operator*() const
     {
-        return container.getElements().at(currIndex);
+        // if (currIndex >= container.primeElement.size())
+        // {
+        //     throw std::out_of_range("out of range!@#");
+        // }
+
+        return *container.primeElement.at(currIndex);
     }
     bool MagicalContainer::PrimeIterator ::operator!=(const PrimeIterator &other) const
     {
@@ -247,15 +285,12 @@ namespace ariel
 
     MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++()
     {
-        if (*this == end() || currIndex >= container.getElements().size())
+        if (  currIndex >= container.primeElement.size()||*this == end())
         {
             throw runtime_error(" out of bounds!!");
         }
         currIndex++;
-        if (!isPrime(container.getElements().at(currIndex)) && currIndex < container.size())
-        {
-            currIndex++;
-        }
+
         return *this;
     }
 
