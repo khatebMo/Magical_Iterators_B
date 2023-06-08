@@ -8,7 +8,7 @@ namespace ariel
     {
     private:
         vector<int> element;
-        vector<int*>primeElement;
+        vector<int*>primeElement; 
 
     public:
         ~MagicalContainer();
@@ -27,7 +27,7 @@ namespace ariel
             size_t currIndex;
 
         public:
-            AscendingIterator();
+            //AscendingIterator();
             ~AscendingIterator();
             AscendingIterator operator&(AscendingIterator &&) = delete;
             AscendingIterator(MagicalContainer &);
@@ -35,7 +35,6 @@ namespace ariel
             AscendingIterator(const AscendingIterator &);
             AscendingIterator begin();
             AscendingIterator end();
-            // AscendingIterator &operator=(const AscendingIterator &);
             int operator*() const;
             bool operator!=(const AscendingIterator &) const;
             bool operator==(const AscendingIterator &) const;

@@ -23,17 +23,20 @@ namespace ariel
     }
 
     //==============MagicalContainer Class=======
+    // constructor/D-ctor
     MagicalContainer::MagicalContainer()
     {
     }
     MagicalContainer::~MagicalContainer()
     {
     }
+    //sort the element vector
     void MagicalContainer::sortVector()
     {
         std::sort(element.begin(), element.end());
     }
 
+    //add new element to the vector
     void MagicalContainer::addElement(int element)
     {
         this->element.push_back(element);
@@ -72,8 +75,9 @@ namespace ariel
             {
                 if (**i == removed)
                 {
-                    primeElement.erase(i);
-                    break;
+                    // primeElement.erase(i);
+                    // break;
+                    removePrimeElement(*i);
                 }
             }
         }
@@ -97,7 +101,7 @@ namespace ariel
     }
 
     //===========AscendingIterator Class================
-
+        //C-tors/D-tor
     MagicalContainer::AscendingIterator::~AscendingIterator()
     {
     }
@@ -111,7 +115,7 @@ namespace ariel
     MagicalContainer ::AscendingIterator::AscendingIterator(const AscendingIterator &other) : container(other.container), currIndex(other.currIndex)
     {
     }
-
+        
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator ::begin()
     {
         return AscendingIterator(container, 0);
@@ -252,11 +256,6 @@ namespace ariel
     }
     int MagicalContainer::PrimeIterator::operator*() const
     {
-        // if (currIndex >= container.primeElement.size())
-        // {
-        //     throw std::out_of_range("out of range!@#");
-        // }
-
         return *container.primeElement.at(currIndex);
     }
     bool MagicalContainer::PrimeIterator ::operator!=(const PrimeIterator &other) const
