@@ -5,7 +5,7 @@
 #include <cmath>
 namespace ariel
 {
-    // help function
+    // help function that check if the number is prime
     bool isPrime(int number)
     {
         if (number <= 1)
@@ -39,9 +39,10 @@ namespace ariel
     //add new element to the vector
     void MagicalContainer::addElement(int element)
     {
-        this->element.push_back(element);
+        this->element.push_back(element);//add the element to the container
         sortVector();
         primeElement.clear();
+        //add the primes number to PrimeVector
         for (size_t i = 0; i < this->element.size(); ++i)
         {
             if (isPrime(this->element.at(i)))
@@ -50,10 +51,12 @@ namespace ariel
             }
         }
     }
+    //return the size of the container
     size_t MagicalContainer::size() const
     {
         return element.size();
     }
+    //remove element from the primeVector 
     void MagicalContainer::removePrimeElement(int *prime)
     {
         for (auto it = primeElement.begin(); it != primeElement.end(); ++it)
@@ -65,9 +68,10 @@ namespace ariel
             }
         }
     }
+    //remove element from the container
     void MagicalContainer::removeElement(int removed)
     {
-        bool prime = isPrime(removed);
+        bool prime = isPrime(removed);//to check if the number is a prime number
         bool exist = false;
         if (prime)
         {
@@ -75,8 +79,6 @@ namespace ariel
             {
                 if (**i == removed)
                 {
-                    // primeElement.erase(i);
-                    // break;
                     removePrimeElement(*i);
                 }
             }
@@ -95,6 +97,7 @@ namespace ariel
             throw std::runtime_error("the element is not exist");
         }
     }
+    
     vector<int> MagicalContainer::getElements() const
     {
         return element;
@@ -115,16 +118,17 @@ namespace ariel
     MagicalContainer ::AscendingIterator::AscendingIterator(const AscendingIterator &other) : container(other.container), currIndex(other.currIndex)
     {
     }
-        
+        //Method to get an AscendingIterator pointing to the first element
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator ::begin()
     {
         return AscendingIterator(container, 0);
     }
+    //Method to get an AscendingIterator pointing one position past the last element
     MagicalContainer::AscendingIterator MagicalContainer::AscendingIterator ::end()
     {
         return AscendingIterator(container, container.size());
     }
-
+    // Dereference operator
     int MagicalContainer::AscendingIterator::operator*() const
     {
 
@@ -180,21 +184,23 @@ namespace ariel
     MagicalContainer::SideCrossIterator::SideCrossIterator(MagicalContainer &magicalContainer) : container(magicalContainer), currIndex(0)
     {
     }
+    //Method to get an SideCrossIterator pointing to the first element
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator ::begin()
     {
         return SideCrossIterator(container, 0);
     }
+    //Method to get an SideCrossIterator pointing one position past the last element
     MagicalContainer::SideCrossIterator MagicalContainer::SideCrossIterator ::end()
     {
         return SideCrossIterator(container, container.size());
     }
     int MagicalContainer::SideCrossIterator::operator*() const
     {
-        if (currIndex % 2 == 0)
+        if (currIndex % 2 == 0)// if the index is even return the value from start
         {
             return container.getElements().at(currIndex / 2);
         }
-        return container.getElements().at(container.size() - 1 - ((currIndex - 1) / 2));
+        return container.getElements().at(container.size() - 1 - ((currIndex - 1) / 2));// if the index is odd return the value from the end
     }
 
     MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator=(const SideCrossIterator &other)

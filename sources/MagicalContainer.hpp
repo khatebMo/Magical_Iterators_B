@@ -2,7 +2,7 @@
 using namespace std;
 namespace ariel
 {
-    bool isPrime(int number);
+    bool isPrime(int number);//check if the number isPrime
 
     class MagicalContainer
     {
